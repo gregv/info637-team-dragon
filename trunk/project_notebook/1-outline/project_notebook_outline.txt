@@ -1,0 +1,97 @@
+INFO 637 - Spring 2010
+
+This zip file contains the project notebook for Team Dragon. Team Dragon is:
+
+Dimitar Dimitrov
+Patrick Freestone
+Greg Vannoni
+
+=============================================
+The following sections describe the contents of each subdirectory in this zip. The directories
+are ordered by number as specified in Appendix G of Watts S. Humphrey's "Introduction to the 
+Team Software Process" on pg. 445.
+
+IMPORTANT NOTE!!
+
+Not all information detailed in this outline will be available in the project notebook
+depending on the point in the project cycle it is viewed. For example, the cycle reports will
+not be available until the end of the cycle.
+
+=============================================
+1-outline
+=============================================
+This directory contains the file project_notebook_outline.txt (this), which you
+have already discovered.
+
+=============================================
+2-summary and reports
+=============================================
+This folder contains the following:
+
+-Document detailing the project name, dates, team members, and role assignments
+-The SUMP and SUMQ forms with plan and actual system data
+-Team TASK and SCHEDULE forms with plan and actual data
+-Team and engineers' WEEK report forms
+
+=============================================
+3-project and cycle reports
+=============================================
+This folder contains the following:
+
+-Final reports for each development cycle
+-Any miscellaneous documents that are going to contribute to the development
+	cycle reports later on
+
+=============================================
+4-task and schedule plans and actuals
+=============================================
+This folder contains the following:
+
+-All plan and actual resource and schedule data
+-A summary of task and schedule performance versus plan
+-Engineer TASK, SCHEDULE, LOGT, and LOGD forms.
+
+=============================================
+5-process documents
+=============================================
+This folder contains the following:
+
+-If any processes are changed from the TSPi, documents detailing the new process and the PIP
+-The change control procedure and any related documents
+-The configuration management process
+-The issue and risk tracking process
+
+=============================================
+6-system and component plan and actual data
+=============================================
+This folder contains the following:
+
+-The SUMP and SUMQ forms for every product component
+
+=============================================
+7-test plans and data
+=============================================
+This folder contains the following:
+
+-The build, integration, and system test plans
+-Test logs and test data (LOGTEST)
+-Test defect review records
+
+=============================================
+8-inspection reports and defect logs
+=============================================
+This folder contains the following:
+
+-All inspection reports (INS)
+-All defect logs (LOGD)
+
+=============================================
+9-working notes and documents
+=============================================
+This folder contains the following:
+
+-System requirements specification (SRS)
+-The development strategy
+-System design specification (SDS) with SRS traceability
+-All design documents
+-Other important documents (CCR, CSR, SUMTASK, etc.)
