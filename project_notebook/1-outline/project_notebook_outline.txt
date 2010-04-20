@@ -28,10 +28,10 @@ have already discovered.
 =============================================
 This folder contains the following:
 
--Document detailing the project name, dates, team members, and role assignments
--The SUMP and SUMQ forms with plan and actual system data
--Team TASK and SCHEDULE forms with plan and actual data
--Team and engineers' WEEK report forms
+-Document detailing the project name, dates, team members, and role assignments (Project and Team Overview.docx)
+-The SUMP and SUMQ forms with plan and actual system data (SUMP and SUMQ Forms.docx)
+-Team TASK and SCHEDULE forms with plan and actual data (Team TASK and SCHEDULE Forms.docx)
+-Team and engineers' WEEK report forms (Team and Engineer WEEK Forms.docx)
 
 =============================================
 3-project and cycle reports
@@ -48,8 +48,8 @@ This folder contains the following:
 This folder contains the following:
 
 -All plan and actual resource and schedule data
--A summary of task and schedule performance versus plan
--Engineer TASK, SCHEDULE, LOGT, and LOGD forms.
+-A summary of task and schedule performance versus plan 
+-Engineer TASK, SCHEDULE, LOGT, and LOGD forms. (Engineer TASK SCHEDULE LOGT and LOGD Forms.docx)
 
 =============================================
 5-process documents
@@ -57,16 +57,16 @@ This folder contains the following:
 This folder contains the following:
 
 -If any processes are changed from the TSPi, documents detailing the new process and the PIP
--The change control procedure and any related documents
--The configuration management process
--The issue and risk tracking process
+-The change control procedure and any related documents (Change Control Procedure.docx)
+-The configuration management process (Configuration Management Process.docx)
+-The issue and risk tracking process (Issue and Risk Tracking Process.docx)
 
 =============================================
 6-system and component plan and actual data
 =============================================
 This folder contains the following:
 
--The SUMP and SUMQ forms for every product component
+-The SUMP and SUMQ forms for every product component (SUMP and SUMQ Forms by Component.docx)
 
 =============================================
 7-test plans and data
@@ -91,7 +91,7 @@ This folder contains the following:
 This folder contains the following:
 
 -System requirements specification (SRS)
--The development strategy
+-The development strategy (Conceptual Design and STRAT Form.docx)
 -System design specification (SDS) with SRS traceability
 -All design documents
 -Other important documents (CCR, CSR, SUMTASK, etc.)
