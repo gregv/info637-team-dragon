@@ -10,18 +10,23 @@
     </path>
 
 	
-	<target name="all" depends="compile,war-mainpage,deploy" />
+	<target name="all" depends="clean,compile,war-mainpage,war-jsp,deploy" />
 	
 	
 	<target name="deploy">
 	  <property name="tomcat.local" value="${apache-tomcat.dir}" />
-	  <copy todir="${tomcat.local}/webapps">
+	  <copy todir="${tomcat.local}/webapps" overwrite="on">
 	   	<fileset dir="${mywebapps}">
 	   		<exclude name="web.xml" />
    		</fileset>
 	  </copy>
 	</target>
 	
+	<target name="clean">
+	        <delete file="web/WEB-INF/IMuDb.war" />
+			<delete file="web/WEB-INF/MainPageServlet.war" />
+			<delete dir="classes" />
+    </target>
 	
 	<target name="compile">
         <mkdir dir="classes"/>
@@ -29,8 +34,16 @@
     </target>
 
 
+	<target name="war-jsp" depends="compile">
+			<war destfile="web/WEB-INF/IMuDb.war" webxml="web/WEB-INF/web.xml">
+		      	<fileset dir="src" includes="*.jsp" />
+				<classes dir="classes"/>
+			</war>
+		</target>
+	
 	<target name="war-mainpage" depends="compile">
 		<war destfile="web/WEB-INF/MainPageServlet.war" webxml="web/WEB-INF/web.xml">
+		  <fileset dir="src" excludes="*" />
 		  <classes dir="classes"/>
 		</war>
 	</target>
