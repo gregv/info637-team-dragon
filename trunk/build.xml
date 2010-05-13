@@ -1,0 +1,37 @@
+<project name="IMuDb" default="all" basedir=".">
+	<property name="apache-tomcat.dir"     value="G:\apache-tomcat-5.5.29"/>
+	
+	
+	<property name="lib.dir"     value="lib"/> <!-- Make sure you have servlet-api.jar in this directory! -->
+	<property name="mywebapps"  value="web/WEB-INF/"/>
+
+	<path id="classpath">
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+    </path>
+
+	
+	<target name="all" depends="compile,war-mainpage,deploy" />
+	
+	
+	<target name="deploy">
+	  <property name="tomcat.local" value="${apache-tomcat.dir}" />
+	  <copy todir="${tomcat.local}/webapps">
+	   	<fileset dir="${mywebapps}">
+	   		<exclude name="web.xml" />
+   		</fileset>
+	  </copy>
+	</target>
+	
+	
+	<target name="compile">
+        <mkdir dir="classes"/>
+        <javac srcdir="src" destdir="classes" classpathref="classpath" />
+    </target>
+
+
+	<target name="war-mainpage" depends="compile">
+		<war destfile="web/WEB-INF/MainPageServlet.war" webxml="web/WEB-INF/web.xml">
+		  <classes dir="classes"/>
+		</war>
+	</target>
+</project>
