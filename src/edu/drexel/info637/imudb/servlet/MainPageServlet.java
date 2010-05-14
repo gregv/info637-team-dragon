@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class MainPageServlet extends HttpServlet{
 
-	public void doGet(HttpServletRequest request, HttpServletResponse response)
+	/*public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
   PrintWriter out = response.getWriter();
   out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 " +
@@ -23,6 +23,61 @@ public class MainPageServlet extends HttpServlet{
               "<h1>This is from MainPageServlet - Hello WWW</h1>\n" +
               "<img src=\"http://www.mushon.com/spr09/nmrs/wp-content/uploads/2009/04/imdb-logo.jpg\" />" +
               "</body></html>");
-}
+}*/
+	
+	private String template;
+	private String accessLevel; // TODO Change String to AccessType
+	private long id;
+	private String username;
+	
+	public void doPost(
+		HttpServletRequest request,
+		HttpServletResponse response )
+	{
+		
+	}
+		
+		
+		public void doGet(
+		HttpServletRequest request,
+		HttpServletResponse response)
+		{
+			
+		}
+	
+		public void readTemplateHead( String template )
+		{
+			
+		}
+	
+		public void readTemplateEnd( String template )
+		{
+			
+		}
+		
+		
+		public void displaySearch()
+		{
+			
+		}
+		
+		public void displayInfoAlbum(String album)
+		{
+			
+		}
+		public void displayInfoBand(String band)
+		{
+			
+		}
+		
+		//TODO Change String to AccessType
+		public String checkAuthLevel( String authLevel  )
+		{
+			return null;
+		}
+		protected void trackUserActions()
+		{
+			
+		}
 	
 }
