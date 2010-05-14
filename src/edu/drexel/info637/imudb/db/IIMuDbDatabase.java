@@ -3,6 +3,8 @@
  */
 package edu.drexel.info637.imudb.db;
 
+import java.util.ArrayList;
+
 import edu.drexel.info637.imudb.domain.User;
 import edu.drexel.info637.imudb.user.AccessType;
 
@@ -19,7 +21,7 @@ public interface IIMuDbDatabase {
 
     public User saveUser(User user);
 
-    public void requestSQLExecution(String SQLQuery);
+    public ArrayList<ArrayList<Object>> requestSQLExecution(String SQLQuery);
 
-    public void requestSQLUpdate(String SQLUpdateQuery);
+    public int requestSQLUpdate(String SQLUpdateQuery);
 }

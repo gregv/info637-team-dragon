@@ -2,6 +2,7 @@ package edu.drexel.info637.imudb.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,17 +25,22 @@ public class MainPageServlet extends HttpServlet {
                 + "<h1>This is from MainPageServlet - Hello WWW</h1>\n" + "<img src=\"http://www.mushon.com/spr09/nmrs/wp-content/uploads/2009/04/imdb-logo.jpg\" />" + "</body></html>");
 
         DBObject dbo = new DBObject();
-        dbo.getInstance().requestSQLExecution("SELECT * from User");
+
+        ArrayList<ArrayList<Object>> data = dbo.getInstance().requestSQLExecution("SELECT * from User");
+
+        System.out.println(data.toString());
+
+        for (ArrayList<Object> o : data) {
+            Integer userId = (Integer)o.get(1);
+            String username = (String)o.get(2);
+            System.out.println(userId + " " + username);
+        }
 
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
 
     }
-
-    /*
-     * public void doGet(HttpServletRequest request, HttpServletResponse response) { }
-     */
 
     public void readTemplateHead(String template) {
 
