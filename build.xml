@@ -1,50 +1,54 @@
 <project name="IMuDb" default="all" basedir=".">
-	<property name="apache-tomcat.dir"     value="G:\apache-tomcat-5.5.29"/>
-	
-	
-	<property name="lib.dir"     value="lib"/> <!-- Make sure you have servlet-api.jar in this directory! -->
-	<property name="mywebapps"  value="web/WEB-INF/"/>
+	<property name="apache-tomcat.dir" value="G:\apache-tomcat-5.5.29"/>
+	<property name="classes.dir" value="classes"/>
+	<property name="dist.dir" value="dist"/>
+	<property name="src.dir" value="src"/>
+	<property name="lib.dir" value="lib"/> <!-- Make sure you have servlet-api.jar in this directory! -->
+	<property name="test.dir" value="test"/>
+	<property name="web.dir" value="web"/>
 
 	<path id="classpath">
         <fileset dir="${lib.dir}" includes="**/*.jar"/>
     </path>
 
-	
-	<target name="all" depends="clean,compile,war-mainpage,war-jsp,deploy" />
-	
+	<target name="all" depends="build,deploy" />
+	<target name="build" depends="clean,compile,war-imudb"/>
 	
 	<target name="deploy">
 	  <property name="tomcat.local" value="${apache-tomcat.dir}" />
 	  <copy todir="${tomcat.local}/webapps" overwrite="on">
-	   	<fileset dir="${mywebapps}">
-	   		<exclude name="web.xml" />
+	   	<fileset dir="${dist.dir}">
+	   		<include name="*.war" />
    		</fileset>
 	  </copy>
 	</target>
 	
+	<target name="init">
+		<mkdir dir="${classes.dir}"/>
+		<mkdir dir="${dist.dir}"/>
+	</target>
+	
 	<target name="clean">
-	        <delete file="web/WEB-INF/IMuDb.war" />
-			<delete file="web/WEB-INF/MainPageServlet.war" />
-			<delete dir="classes" />
+		<delete dir="${dist.dir}"/>
+		<delete dir="${classes.dir}" />
     </target>
 	
-	<target name="compile">
-        <mkdir dir="classes"/>
-        <javac srcdir="src" destdir="classes" classpathref="classpath" />
+	<target name="compile" depends="init">
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" />
     </target>
-
-
-	<target name="war-jsp" depends="compile">
-			<war destfile="web/WEB-INF/IMuDb.war" webxml="web/WEB-INF/web.xml">
-		      	<fileset dir="src" includes="*.jsp" />
-				<classes dir="classes"/>
-			</war>
-		</target>
 	
-	<target name="war-mainpage" depends="compile">
-		<war destfile="web/WEB-INF/MainPageServlet.war" webxml="web/WEB-INF/web.xml">
-		  <fileset dir="src" excludes="*" />
-		  <classes dir="classes"/>
+	<target name="war-imudb" depends="compile">
+		<war destfile="${dist.dir}/IMuDb.war" webxml="${web.dir}/WEB-INF/web.xml">
+			<fileset dir="${web.dir}" includes="*.jsp" />
+			<classes dir="${classes.dir}"/>
 		</war>
 	</target>
+	
+	<target name="war-mainpage" depends="compile">
+		<war destfile="${dist.dir}/MainPageServlet.war" webxml="${web.dir}/WEB-INF/web.xml">
+		  <fileset dir="${web.dir}" excludes="*" />
+		  <classes dir="${classes.dir}"/>
+		</war>
+	</target>
+	
 </project>
