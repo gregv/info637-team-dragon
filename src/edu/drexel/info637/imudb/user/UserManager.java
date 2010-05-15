@@ -1,13 +1,14 @@
-/**
- * 
- */
 package edu.drexel.info637.imudb.user;
 
-/**
- * @author Team Dragon
- * @class INFO 637 Purpose:
- * @version Notes:
- */
+import edu.drexel.info637.imudb.domain.User;
+
 public class UserManager {
 
+    public static void createSiteMember(String userName, String password, AccessType accessType) {
+
+    }
+
+    public static AccessType getAccessType(User user) {
+        return null;
+    }
 }
