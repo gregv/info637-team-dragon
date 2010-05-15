@@ -34,21 +34,30 @@
     </target>
 	
 	<target name="compile" depends="init">
-        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" />
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" debug="yes"/>
     </target>
 	
 	<target name="war-imudb" depends="compile">
 		<war destfile="${dist.dir}/IMuDb.war" webxml="${web.dir}/WEB-INF/web.xml">
-			<fileset dir="${web.dir}" includes="*.jsp" />
+			<fileset dir="${web.dir}" />
 			<classes dir="${classes.dir}"/>
 		</war>
 	</target>
 	
-	<target name="war-mainpage" depends="compile">
-		<war destfile="${dist.dir}/MainPageServlet.war" webxml="${web.dir}/WEB-INF/web.xml">
-		  <fileset dir="${web.dir}" excludes="*" />
-		  <classes dir="${classes.dir}"/>
-		</war>
+	<target name="junit-tests" depends="war-imudb">
+		<junit printsummary="yes" haltonfailure="yes">
+			
+			 <classpath>
+			 	<fileset dir="${lib.dir}" includes="**/*.jar"/>
+			 	<pathelement location="${classes.dir}"/>
+			  </classpath>
+			
+			<test name="edu.drexel.info637.imudb.search.BasicSearchTest">
+				<formatter type="plain" usefile="false"/>
+			</test>
+		</junit>
 	</target>
+	
+	
 	
 </project>

@@ -32,10 +32,17 @@
     	<servlet-class>edu.drexel.info637.imudb.servlet.MainPageServlet</servlet-class>
     </servlet>
   
-		<servlet>
-			<servlet-name>LoginPageServlet</servlet-name>
-			<servlet-class>edu.drexel.info637.imudb.servlet.LoginPageServlet</servlet-class>
-		</servlet>
+	<servlet>
+		<servlet-name>LoginPageServlet</servlet-name>
+		<servlet-class>edu.drexel.info637.imudb.servlet.LoginPageServlet</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>BasicSearchPageServlet</servlet-name>
+		<servlet-class>edu.drexel.info637.imudb.servlet.LoginPageServlet</servlet-class>
+	</servlet>
+	
+	
 
     <servlet-mapping>
     	<servlet-name>MainPageServlet</servlet-name>
