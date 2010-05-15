@@ -33,7 +33,6 @@ public class MainPageServlet extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println();
         String searchOption = request.getParameter("SearchOption");
         String searchKeyword = request.getParameter("SearchText");
 
