@@ -1,6 +1,3 @@
-/**
- * 
- */
 package edu.drexel.info637.imudb.db;
 
 import java.sql.Connection;
@@ -11,32 +8,85 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import edu.drexel.info637.imudb.domain.User;
-import edu.drexel.info637.imudb.user.AccessType;
+import edu.drexel.info637.imudb.user.LoginResult;
 
 /**
+ * Implementation of the IIMuDbDatabase interface for a MySQL database
  * @author Team Dragon
- * @class INFO 637 Purpose:
- * @version Notes:
+ *
  */
 public class MySQLIMuDbImpl implements IIMuDbDatabase {
 
-    /*
-     * (non-Javadoc)
-     * @see edu.drexel.info637.imudb.db.IIMuDbDatabase#loadUserAccessLevel(edu.drexel.info637.imudb.domain.User)
+    private static final String DB_URL      = "jdbc:mysql://localhost/IMuDb";
+    private static final String DB_USER     = "root";
+    private static final String DB_PASSWORD = "";
+
+    Connection                  conn        = null;
+
+    /**
+     * Constructor used by the DBObject class when handing out the chosen database interface. The constructor solely
+     * loads the appropriate driver.
      */
-    @ Override
-    public AccessType loadUserAccessLevel(User user) {
+    protected MySQLIMuDbImpl() {
+        loadDriver();
+    }
+
+    /**
+     * {@inheritDoc}
+     * DLD PseudoCode:
+     * {
+     *      1. get connection object
+     *      2. create statement object
+     *      3. populate SQL string to find password
+     *      4. execute statement and get result set
+     *      5. if no rows are return {
+     *          6. populate LoginResult with failure status
+     *          7. add error message to LoginResult
+     *      } 8. else if multiple rows are returned {
+     *          9. populate LoginResult with failure status
+     *          10. add error message to LoginResult
+     *      } 11. else if the password provided is incorrect {
+     *          12. populate LoginResult with failure status
+     *          13. add error message to LoginResult
+     *      } 14. else if passwords match {
+     *          15. populate LoginResult with success status
+     *          16. populate User object on LoginResult
+     *      } 17. else {
+     *          18. populate LoginResult with failure status
+     *          19. add error message to LoginResult
+     *      }
+     * }
+     */
+    public LoginResult authenticateUser(String userName, String password) {
         return null;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.drexel.info637.imudb.db.IIMuDbDatabase#loadUserPassword(java.lang.String)
+    /**
+     * Method responsible for loading the MySQL jdbc driver
      */
-    @ Override
-    public String loadUserPassword(String username) {
-        return null;
+    private void loadDriver() {
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+        } catch (ClassNotFoundException cnfe) {
+            cnfe.printStackTrace();
+        } catch (IllegalAccessException iae) {
+            iae.printStackTrace();
+        } catch (InstantiationException ie) {
+            ie.printStackTrace();
+        }
+    }
+
+    /**
+     * Method responsible for getting/refreshing the database connection
+     */
+    private void getConnection() {
+        if (conn == null) {
+            try {
+                conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            } catch (SQLException sqle) {
+                sqle.printStackTrace();
+            }
+        }
     }
 
     /*
@@ -45,20 +95,15 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
      */
     @ Override
     public ArrayList<ArrayList<Object>> requestSQLExecution(String SQLQuery) {
-        Connection con = null;
+        getConnection();
         Statement stmt = null;
         ResultSet rs = null;
         ArrayList<ArrayList<Object>> result = new ArrayList<ArrayList<Object>>();
 
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con = DriverManager.getConnection("jdbc:mysql:///IMuDb", "root", "");
-
-            if (!con.isClosed())
-                System.out.println("Successfully connected to " + "MySQL server using TCP/IP...");
 
             System.out.println("Performing SQL = " + SQLQuery);
-            stmt = con.createStatement();
+            stmt = conn.createStatement();
             rs = stmt.executeQuery(SQLQuery);
 
             if (rs != null) {
@@ -97,12 +142,6 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
         } catch (Exception e) {
             System.err.println("Exception: " + e.getMessage());
             e.printStackTrace();
-        } finally {
-            try {
-                if (con != null)
-                    con.close();
-            } catch (SQLException e) {
-            }
         }
         return result;
     }
@@ -113,20 +152,15 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
      */
     @ Override
     public int requestSQLUpdate(String SQLUpdateQuery) {
-        Connection con = null;
+        getConnection();
         Statement stmt = null;
         ResultSet rs = null;
         int numberRowsAffected = -1;
 
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con = DriverManager.getConnection("jdbc:mysql:///IMuDb", "root", "");
-
-            if (!con.isClosed())
-                System.out.println("Successfully connected to " + "MySQL server using TCP/IP...");
 
             System.out.println("Performing SQL = " + SQLUpdateQuery);
-            stmt = con.createStatement();
+            stmt = conn.createStatement();
             numberRowsAffected = stmt.executeUpdate(SQLUpdateQuery);
         } catch (SQLException se) {
             while (se != null) {
@@ -140,28 +174,9 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
         } catch (Exception e) {
             System.err.println("Exception: " + e.getMessage());
             e.printStackTrace();
-        } finally {
-            try {
-                if (con != null)
-                    con.close();
-            } catch (SQLException e) {
-            }
         }
 
         return numberRowsAffected;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see edu.drexel.info637.imudb.db.IIMuDbDatabase#saveUser(edu.drexel.info637.imudb.domain.User)
-     */
-    @ Override
-    public User saveUser(User user) {
-        return null;
-    }
-
-    public void logAction(String action) {
-
     }
 
 }
