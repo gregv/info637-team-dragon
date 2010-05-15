@@ -1,51 +1,50 @@
 package edu.drexel.info637.imudb.domain;
 
-import java.util.Date;
-
 public class User {
-    public int    UserID       = 0;
-    public String sUserName    = "";
-    public String sPass        = "";
-    public String sEmail       = "";
-    public String sAccessLevel = "";
+    private int    id           = 0;
+    private String userName     = "";
+    private String password     = "";
+    private String emailAddress = "";
+    private String accessLevel  = "";
 
-    public void setUserID(int iD) {
-        UserID = iD;
+    public int getId() {
+        return id;
     }
 
-    public int getUserID() {
-        return UserID;
-    }
-
-    public void setUserName(String sN) {
-        sUserName = sN;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUserName() {
-        return sUserName;
+        return userName;
     }
 
-    public void setPass(String sP) {
-        sPass = sP;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getPass() {
-        return sPass;
+    public String getPassword() {
+        return password;
     }
 
-    public void setEmail(String sE) {
-        sEmail = sE;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public String getEmail() {
-        return sEmail;
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
-    public void setAccessLevel(String sA) {
-        sAccessLevel = sA;
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
     public String getAccessLevel() {
-        return sAccessLevel;
+        return accessLevel;
     }
+
+    public void setAccessLevel(String accessLevel) {
+        this.accessLevel = accessLevel;
+    }
+
 }
