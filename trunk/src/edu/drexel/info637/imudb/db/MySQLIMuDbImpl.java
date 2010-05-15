@@ -2,6 +2,7 @@ package edu.drexel.info637.imudb.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -17,11 +18,13 @@ import edu.drexel.info637.imudb.user.LoginResult;
  */
 public class MySQLIMuDbImpl implements IIMuDbDatabase {
 
-    private static final String DB_URL      = "jdbc:mysql://localhost/IMuDb";
-    private static final String DB_USER     = "root";
-    private static final String DB_PASSWORD = "";
+    private static final String DB_URL                            = "jdbc:mysql://localhost/IMuDb";
+    private static final String DB_USER                           = "root";
+    private static final String DB_PASSWORD                       = "";
 
-    Connection                  conn        = null;
+    private static final String SQL_SELECT_PASSWORD_WITH_USERNAME = "SELECT password FROM user WHERE username = ?";
+
+    Connection                  conn                              = null;
 
     /**
      * Constructor used by the DBObject class when handing out the chosen database interface. The constructor solely
@@ -58,7 +61,36 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
      * }
      */
     public LoginResult authenticateUser(String userName, String password) {
-        return null;
+        getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        LoginResult loginResult = new LoginResult();
+
+        try {
+            stmt = conn.prepareStatement(SQL_SELECT_PASSWORD_WITH_USERNAME);
+            stmt.setString(1, userName);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                String databasePassword = rs.getString(1);
+                if (rs.next()) {
+                    loginResult.setSuccess(false);
+                    loginResult.setErrorMsg("More than one user by that name. Contact Sys Admin.");
+                } else {
+                    if (databasePassword.equals(password)) {
+                        loginResult.setSuccess(true);
+                    } else {
+                        loginResult.setSuccess(false);
+                        loginResult.setErrorMsg("incorrect password");
+                    }
+                }
+            } else {
+                loginResult.setSuccess(false);
+                loginResult.setErrorMsg("No user found by that name.");
+            }
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+        return loginResult;
     }
 
     /**
@@ -93,7 +125,6 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
      * (non-Javadoc)
      * @see edu.drexel.info637.imudb.db.IIMuDbDatabase#requestSQLExecution(java.lang.String)
      */
-    @ Override
     public ArrayList<ArrayList<Object>> requestSQLExecution(String SQLQuery) {
         getConnection();
         Statement stmt = null;
@@ -150,7 +181,6 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
      * (non-Javadoc)
      * @see edu.drexel.info637.imudb.db.IIMuDbDatabase#requestSQLUpdate(java.lang.String)
      */
-    @ Override
     public int requestSQLUpdate(String SQLUpdateQuery) {
         getConnection();
         Statement stmt = null;
@@ -177,6 +207,19 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
         }
 
         return numberRowsAffected;
+    }
+
+    /**
+     * Overriding the finalize method to ensure the database connection is closed when this object goes away.
+     */
+    public void finalize() {
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException sqle) {
+                sqle.printStackTrace();
+            }
+        }
     }
 
 }
