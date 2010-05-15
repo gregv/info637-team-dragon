@@ -28,13 +28,23 @@
 
    
     <servlet>
-        <servlet-name>MainPageServlet</servlet-name>
-        <servlet-class>edu.drexel.info637.imudb.servlet.MainPageServlet</servlet-class>
+    	<servlet-name>MainPageServlet</servlet-name>
+    	<servlet-class>edu.drexel.info637.imudb.servlet.MainPageServlet</servlet-class>
     </servlet>
   
+		<servlet>
+			<servlet-name>LoginPageServlet</servlet-name>
+			<servlet-class>edu.drexel.info637.imudb.servlet.MainPageServlet</servlet-class>
+		</servlet>
 
     <servlet-mapping>
-        <servlet-name>MainPageServlet</servlet-name>
-        <url-pattern>/servlet/MainPageServlet</url-pattern>
+    	<servlet-name>MainPageServlet</servlet-name>
+    	<url-pattern>/servlet/MainPageServlet</url-pattern>
     </servlet-mapping>
+		
+		<servlet-mapping>
+			<servlet-name>LoginPageServlet</servlet-name>
+			<url-pattern>/servlet/LoginPageServlet</url-pattern>
+		</servlet-mapping>
+
 </web-app>
