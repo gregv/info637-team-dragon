@@ -14,9 +14,8 @@ import edu.drexel.info637.imudb.domain.Song;
 import edu.drexel.info637.imudb.domain.Track;
 
 /**
+ * Allows users to store search results in different fashions
  * @author Team Dragon
- * @class INFO 637 Purpose:
- * @version Notes:
  */
 public class SearchResults {
 
@@ -24,6 +23,10 @@ public class SearchResults {
 
     public SearchResults() {
         results = new ArrayList<Object>();
+    }
+
+    public int size() {
+        return results.size();
     }
 
     public void addResult(Object r) {

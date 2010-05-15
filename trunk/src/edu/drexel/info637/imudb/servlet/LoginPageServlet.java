@@ -27,22 +27,16 @@ public class LoginPageServlet extends HttpServlet {
     PrintWriter           out                    = null;
 
     /**
-     * Overrides the parent's method and forwards the request to the processRequest method. 
-     * DLD PseudoCode:
-     * {
-     *      1. forward request and response objects to processRequest
-     * }
+     * Overrides the parent's method and forwards the request to the processRequest method. DLD PseudoCode: { 1. forward
+     * request and response objects to processRequest }
      */
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
         processRequest(request, response);
     }
 
     /**
-     * Overrides the parent's method and forwards the request to the processRequest method
-     * DLD PseudoCode:
-     * {
-     *      1. forward request and response objects to processRequest
-     * }
+     * Overrides the parent's method and forwards the request to the processRequest method DLD PseudoCode: { 1. forward
+     * request and response objects to processRequest }
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         processRequest(request, response);
@@ -51,20 +45,12 @@ public class LoginPageServlet extends HttpServlet {
     /**
      * This method is responsible for processing the user's login by looking up the username-password pair in the
      * database and returning the user to the main page with as a validated user or sending them to an error page and
-     * allowing them to log in again. DLD PseudoCode: 
-     * {
-     *      1. set userName from request parameter
-     *      2. set password from request parameter
-     *      3. if (LoginResult is success) {
-     *          4. load User object from LoginResult
-     *          5. set session to have user object of the authenticated user
-     *          6. forward the request back to the main page
-     *      } 7. else {
-     *          8. write out the login page again with an error message
-     *      }
-     *  }
-     * @param request   request object that should have a "username" and "password" parameter set
-     * @param response  returned page; either forwarded to the main page or reload the login page with an error
+     * allowing them to log in again. DLD PseudoCode: { 1. set userName from request parameter 2. set password from
+     * request parameter 3. if (LoginResult is success) { 4. load User object from LoginResult 5. set session to have
+     * user object of the authenticated user 6. forward the request back to the main page } 7. else { 8. write out the
+     * login page again with an error message } }
+     * @param request request object that should have a "username" and "password" parameter set
+     * @param response returned page; either forwarded to the main page or reload the login page with an error
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
 
@@ -90,6 +76,7 @@ public class LoginPageServlet extends HttpServlet {
                 out.print(FAILED_LOGIN_HTML_HEAD);
                 out.print(loginResult.getErrorMsg());
                 out.print(FAILED_LOGIN_HTML_TAIL);
+                out.close();
 
             } catch (IOException ioe) {
                 ioe.printStackTrace();

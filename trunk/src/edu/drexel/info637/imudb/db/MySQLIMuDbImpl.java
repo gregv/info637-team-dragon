@@ -77,7 +77,7 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
                 String producer = rs.getString(i++);
 
                 a.setAlbumID(albumId);
-                a.setAlbumName(name);
+                a.setName(name);
                 a.setReleaseDate(releaseDate);
                 a.setRecordLabel(recordLabel);
                 a.setProducer(producer);
