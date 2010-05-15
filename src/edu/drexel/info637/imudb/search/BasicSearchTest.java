@@ -3,8 +3,6 @@
  */
 package edu.drexel.info637.imudb.search;
 
-import static org.junit.Assert.fail;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,8 +40,8 @@ public class BasicSearchTest {
      */
     @ Test
     public void testGetResults() {
-        basicSearch.getResults();
-        fail("Not yet implemented");
+        SearchResults sr = basicSearch.getResults();
+
     }
 
 }

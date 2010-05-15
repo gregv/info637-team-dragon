@@ -1,6 +1,7 @@
 package edu.drexel.info637.imudb.db;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,13 +9,18 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
 
+import edu.drexel.info637.imudb.domain.Album;
+import edu.drexel.info637.imudb.domain.Band;
+import edu.drexel.info637.imudb.search.SearchResults;
 import edu.drexel.info637.imudb.user.LoginResult;
 
 /**
  * Implementation of the IIMuDbDatabase interface for a MySQL database
  * @author Team Dragon
- *
  */
 public class MySQLIMuDbImpl implements IIMuDbDatabase {
 
@@ -23,6 +29,12 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
     private static final String DB_PASSWORD                       = "";
 
     private static final String SQL_SELECT_PASSWORD_WITH_USERNAME = "SELECT password FROM user WHERE username = ?";
+    private static final String SQL_BASIC_SEARCH_TABLES_ALBUM     = "SELECT * FROM album WHERE name = ?";
+    private static final String SQL_BASIC_SEARCH_TABLES_BAND      = "SELECT * FROM band WHERE name = ?";
+    private static final String SQL_BASIC_SEARCH_TABLES_CONCERT   = "SELECT * FROM concert WHERE venue = ?";
+    private static final String SQL_BASIC_SEARCH_TABLES_MUSICIAN  = "SELECT * FROM musician WHERE name = ?";
+    private static final String SQL_BASIC_SEARCH_TABLES_SONG      = "SELECT * FROM song WHERE name = ?";
+    private static final String SQL_BASIC_SEARCH_TABLES_TRACK     = "SELECT t.* FROM track t,song s WHERE s.name = ? AND t.song_id = s.song_id";
 
     Connection                  conn                              = null;
 
@@ -34,31 +46,111 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
         loadDriver();
     }
 
+    public SearchResults performBasicSearch(String keyword) {
+        SearchResults searchResults = new SearchResults();
+        searchResults.setAlbumList(searchAlbums(keyword));
+        searchResults.setBand(searchBands(keyword));
+        return searchResults;
+    }
+
+    public List<Album> searchAlbums(String keyword) {
+        getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<Album> albums = new ArrayList<Album>();
+
+        try {
+            stmt = conn.prepareStatement(SQL_BASIC_SEARCH_TABLES_ALBUM);
+            stmt.setString(1, keyword);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+
+                Album a = new Album();
+
+                int i = 1;
+                Integer key = rs.getInt(i++);
+                Integer albumId = rs.getInt(i++);
+                String name = rs.getString(i++);
+                Date releaseDate = rs.getDate(i++);
+                String recordLabel = rs.getString(i++);
+                String producer = rs.getString(i++);
+
+                a.setAlbumID(albumId);
+                a.setAlbumName(name);
+                a.setReleaseDate(releaseDate);
+                a.setRecordLabel(recordLabel);
+                a.setProducer(producer);
+
+                albums.add(a);
+
+            }
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+        return albums;
+    }
+
+    public List<Band> searchBands(String keyword) {
+        getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<Band> bands = new ArrayList<Band>();
+
+        try {
+            stmt = conn.prepareStatement(SQL_BASIC_SEARCH_TABLES_BAND);
+            stmt.setString(1, keyword);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+
+                Band b = new Band();
+
+                int i = 1;
+                Integer key = rs.getInt(i++);
+                Integer bandId = rs.getInt(i++);
+                String name = rs.getString(i++);
+                String placeOfFormation = rs.getString(i++);
+                Integer yearOfFormation = rs.getInt(i++);
+                String websiteLink = rs.getString(i++);
+                String description = rs.getString(i++);
+                String influences = rs.getString(i++);
+                String hobbies = rs.getString(i++);
+                Integer genreId = rs.getInt(i++);
+
+                b.setBandID(bandId);
+                b.setDescription(description);
+                b.setExternalWebsite(websiteLink);
+                b.setGenreID(genreId);
+                b.setHobbies(hobbies);
+                b.setInfluences(influences);
+                b.setName(name);
+                b.setPlaceFormed(placeOfFormation);
+
+                // Need to convert year to date
+                Calendar c = new GregorianCalendar();
+                c.set(yearOfFormation, 0, 1);
+                Date yearFormed = new Date(c.getTimeInMillis());
+
+                b.setYearFormed(yearFormed);
+
+                bands.add(b);
+
+            }
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+        return bands;
+    }
+
     /**
-     * {@inheritDoc}
-     * DLD PseudoCode:
-     * {
-     *      1. get connection object
-     *      2. create statement object
-     *      3. populate SQL string to find password
-     *      4. execute statement and get result set
-     *      5. if no rows are return {
-     *          6. populate LoginResult with failure status
-     *          7. add error message to LoginResult
-     *      } 8. else if multiple rows are returned {
-     *          9. populate LoginResult with failure status
-     *          10. add error message to LoginResult
-     *      } 11. else if the password provided is incorrect {
-     *          12. populate LoginResult with failure status
-     *          13. add error message to LoginResult
-     *      } 14. else if passwords match {
-     *          15. populate LoginResult with success status
-     *          16. populate User object on LoginResult
-     *      } 17. else {
-     *          18. populate LoginResult with failure status
-     *          19. add error message to LoginResult
-     *      }
-     * }
+     * {@inheritDoc} DLD PseudoCode: { 1. get connection object 2. create statement object 3. populate SQL string to
+     * find password 4. execute statement and get result set 5. if no rows are return { 6. populate LoginResult with
+     * failure status 7. add error message to LoginResult } 8. else if multiple rows are returned { 9. populate
+     * LoginResult with failure status 10. add error message to LoginResult } 11. else if the password provided is
+     * incorrect { 12. populate LoginResult with failure status 13. add error message to LoginResult } 14. else if
+     * passwords match { 15. populate LoginResult with success status 16. populate User object on LoginResult } 17. else
+     * { 18. populate LoginResult with failure status 19. add error message to LoginResult } }
      */
     public LoginResult authenticateUser(String userName, String password) {
         getConnection();
