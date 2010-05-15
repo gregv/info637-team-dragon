@@ -3,11 +3,7 @@
  */
 package edu.drexel.info637.imudb.search;
 
-import java.util.List;
-
 import edu.drexel.info637.imudb.db.DBObject;
-import edu.drexel.info637.imudb.domain.Album;
-import edu.drexel.info637.imudb.domain.Band;
 
 /**
  * @author Team Dragon
@@ -27,16 +23,8 @@ public class BasicSearch implements ISearch {
      */
     @ Override
     public SearchResults getResults() {
-
         SearchResults results = DBObject.getInstance().performBasicSearch(keyword);
-
-        List<Album> albums = results.getAlbums();
-        List<Band> bands = results.getBands();
-
-        System.out.println(albums.toString());
-        System.out.println(bands.toString());
-
-        return null;
+        return results;
     }
 
     public void setKeyword(String keyword) {
