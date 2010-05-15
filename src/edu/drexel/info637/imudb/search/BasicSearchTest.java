@@ -57,6 +57,6 @@ public class BasicSearchTest {
         assertTrue("Data integrity", sr.getAlbums().get(0).getAlbumID() == 101);
 
         sr = basicSearchForNothing.getResults();
-        assertTrue("Result size", sr.size() == 0);
+        assertTrue("Result size", sr.size() == 2);
     }
 }

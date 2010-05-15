@@ -79,4 +79,8 @@ public class Album {
         this.producer = producer;
     }
 
+    public String toString() {
+        return AlbumID + ", " + name + ", " + recordLabel + ", " + producer;
+    }
+
 }
