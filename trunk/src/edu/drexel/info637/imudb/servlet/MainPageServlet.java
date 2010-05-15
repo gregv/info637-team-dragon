@@ -26,12 +26,16 @@ public class MainPageServlet extends HttpServlet {
     private String            username;
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Does not do anything in this release
         PrintWriter out = response.getWriter();
-        out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 " + "Transitional//EN\">\n" + "<html>\n" + "<head><title>This is from MainPageServlet - Hello WWW</title></head>\n" + "<body>\n"
-                + "<h1>This is from MainPageServlet - Hello WWW</h1>\n" + "<img src=\"http://www.mushon.com/spr09/nmrs/wp-content/uploads/2009/04/imdb-logo.jpg\" />" + "</body></html>");
-
+        out.println("Welcome to the MainPageServlet");
     }
 
+    /*
+     * (non-Javadoc)
+     * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest,
+     * javax.servlet.http.HttpServletResponse) Handles user searching functions
+     */
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
         String searchOption = request.getParameter("SearchOption");
         String searchKeyword = request.getParameter("SearchText");

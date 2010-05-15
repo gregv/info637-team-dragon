@@ -29,10 +29,10 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
     private static final String DB_PASSWORD                       = "";
 
     private static final String SQL_SELECT_PASSWORD_WITH_USERNAME = "SELECT password FROM user WHERE username = ?";
-    private static final String SQL_BASIC_SEARCH_TABLES_ALBUM     = "SELECT * FROM album WHERE name = ?";
-    private static final String SQL_BASIC_SEARCH_TABLES_BAND      = "SELECT * FROM band WHERE name = ?";
+    private static final String SQL_BASIC_SEARCH_TABLES_ALBUM     = "SELECT * FROM album WHERE name like ?";
+    private static final String SQL_BASIC_SEARCH_TABLES_BAND      = "SELECT * FROM band WHERE name like ?";
     private static final String SQL_BASIC_SEARCH_TABLES_CONCERT   = "SELECT * FROM concert WHERE venue = ?";
-    private static final String SQL_BASIC_SEARCH_TABLES_MUSICIAN  = "SELECT * FROM musician WHERE name = ?";
+    private static final String SQL_BASIC_SEARCH_TABLES_MUSICIAN  = "SELECT * FROM musician WHERE name like ?";
     private static final String SQL_BASIC_SEARCH_TABLES_SONG      = "SELECT * FROM song WHERE name = ?";
     private static final String SQL_BASIC_SEARCH_TABLES_TRACK     = "SELECT t.* FROM track t,song s WHERE s.name = ? AND t.song_id = s.song_id";
 
@@ -46,6 +46,9 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
         loadDriver();
     }
 
+    /*
+     * Allows a user to search album and band information with a single keyword
+     */
     public SearchResults performBasicSearch(String keyword) {
         SearchResults searchResults = new SearchResults();
         searchResults.setAlbumList(searchAlbums(keyword));
@@ -53,6 +56,9 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
         return searchResults;
     }
 
+    /*
+     * Searches album information in the database
+     */
     public List<Album> searchAlbums(String keyword) {
         getConnection();
         PreparedStatement stmt = null;
@@ -61,7 +67,7 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
 
         try {
             stmt = conn.prepareStatement(SQL_BASIC_SEARCH_TABLES_ALBUM);
-            stmt.setString(1, keyword);
+            stmt.setString(1, keyword + "%");
             rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -91,6 +97,9 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
         return albums;
     }
 
+    /*
+     * Searches for band information in the database
+     */
     public List<Band> searchBands(String keyword) {
         getConnection();
         PreparedStatement stmt = null;
@@ -99,7 +108,7 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
 
         try {
             stmt = conn.prepareStatement(SQL_BASIC_SEARCH_TABLES_BAND);
-            stmt.setString(1, keyword);
+            stmt.setString(1, keyword + "%");
             rs = stmt.executeQuery();
 
             while (rs.next()) {
