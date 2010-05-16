@@ -16,7 +16,6 @@ public class BasicSearch implements ISearch {
      * (non-Javadoc)
      * @see edu.drexel.info637.imudb.search.ISearch#getResults()
      */
-    @ Override
     public SearchResults getResults() {
         SearchResults results = DBObject.getInstance().performBasicSearch(keyword);
         return results;
