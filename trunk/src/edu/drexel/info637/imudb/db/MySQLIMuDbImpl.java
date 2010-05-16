@@ -15,6 +15,7 @@ import java.util.List;
 
 import edu.drexel.info637.imudb.domain.Album;
 import edu.drexel.info637.imudb.domain.Band;
+import edu.drexel.info637.imudb.domain.User;
 import edu.drexel.info637.imudb.search.SearchResults;
 import edu.drexel.info637.imudb.user.LoginResult;
 
@@ -179,6 +180,10 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
                 } else {
                     if (databasePassword.equals(password)) {
                         loginResult.setSuccess(true);
+                        User user = new User();
+                        user.setUserName(userName);
+                        user.setPassword(databasePassword);
+                        loginResult.setUser(user);
                     } else {
                         loginResult.setSuccess(false);
                         loginResult.setErrorMsg("incorrect password");
