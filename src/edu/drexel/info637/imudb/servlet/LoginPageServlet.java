@@ -62,7 +62,7 @@ public class LoginPageServlet extends HttpServlet {
             HttpSession session = request.getSession(true);
             User loggedInUser = loginResult.getUser();
             session.setAttribute("user", loggedInUser);
-            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/index.htm");
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/index.jsp");
             try {
                 dispatcher.include(request, response);
             } catch (IOException ioe) {
