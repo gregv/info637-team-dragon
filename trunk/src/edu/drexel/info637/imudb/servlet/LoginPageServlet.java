@@ -22,7 +22,7 @@ import edu.drexel.info637.imudb.user.LoginResult;
 public class LoginPageServlet extends HttpServlet {
 
     private static String FAILED_LOGIN_HTML_HEAD = "<html><p>";
-    private static String FAILED_LOGIN_HTML_TAIL = "</p><p><a href=\"login.jsp\">Retry Login</a></p><p><a href=\"index.html\">Home Page</a></p></html>";
+    private static String FAILED_LOGIN_HTML_TAIL = "</p><p><a href=\"loginpage.jsp\">Retry Login</a></p><p><a href=\"index.htm\">Home Page</a></p></html>";
 
     PrintWriter           out                    = null;
 
@@ -62,7 +62,7 @@ public class LoginPageServlet extends HttpServlet {
             HttpSession session = request.getSession(true);
             User loggedInUser = loginResult.getUser();
             session.setAttribute("user", loggedInUser);
-            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/servlet/MainPageServlet");
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/index.htm");
             try {
                 dispatcher.include(request, response);
             } catch (IOException ioe) {
