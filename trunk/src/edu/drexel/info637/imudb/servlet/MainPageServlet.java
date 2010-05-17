@@ -84,7 +84,7 @@ public class MainPageServlet extends HttpServlet {
             out.printf("<tr bgcolor='#C0C0C0'> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> </tr>", "ID", "Name", "Producer", "Record Label");
 
             for (Album a : albums) {
-                out.printf("<tr> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> </tr>", a.getAlbumID(), a.getName(), a.getProducer(), a.getRecordLabel());
+                out.printf("<tr> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> </tr>", a.getAlbumID(), a.getAlbumName(), a.getProducer(), a.getRecordLabel());
             }
             out.println("</table>");
         }

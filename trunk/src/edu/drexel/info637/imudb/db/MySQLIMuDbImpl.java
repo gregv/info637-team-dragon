@@ -15,6 +15,8 @@ import java.util.List;
 
 import edu.drexel.info637.imudb.domain.Album;
 import edu.drexel.info637.imudb.domain.Band;
+import edu.drexel.info637.imudb.domain.Genre;
+import edu.drexel.info637.imudb.domain.Song;
 import edu.drexel.info637.imudb.domain.User;
 import edu.drexel.info637.imudb.search.SearchResults;
 import edu.drexel.info637.imudb.user.LoginResult;
@@ -36,11 +38,11 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
     private static final String SQL_BASIC_SEARCH_TABLES_MUSICIAN  = "SELECT * FROM musician WHERE name like ?";
     private static final String SQL_BASIC_SEARCH_TABLES_SONG      = "SELECT * FROM song WHERE name = ?";
     private static final String SQL_BASIC_SEARCH_TABLES_TRACK     = "SELECT t.* FROM track t,song s WHERE s.name = ? AND t.song_id = s.song_id";
-    private static final String SQL_BAND_DETAILS     = "SELECT * FROM band WHERE Band_ID = ?";
-    private static final String SQL_GENRE_NAME       = "SELECT * FROM genre WHERE Genre_ID = ?";
+    private static final String SQL_BAND_DETAILS                  = "SELECT * FROM band WHERE Band_ID = ?";
+    private static final String SQL_GENRE_NAME                    = "SELECT * FROM genre WHERE Genre_ID = ?";
     private static final String SQL_BAND_ALBUM_CONTRIBUTION       = "SELECT * FROM bandalbumcontribution WHERE Band_ID = ?";
-    private static final String SQL_ALBUM_INFORMATION       = "SELECT * FROM album WHERE Album_ID = ?";
-    private static final String SQL_ALBUM_SONGS       = "SELECT * FROM song WHERE Album_ID = ?";
+    private static final String SQL_ALBUM_INFORMATION             = "SELECT * FROM album WHERE Album_ID = ?";
+    private static final String SQL_ALBUM_SONGS                   = "SELECT * FROM song WHERE Album_ID = ?";
 
     Connection                  conn                              = null;
 
@@ -89,7 +91,7 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
                 String producer = rs.getString(i++);
 
                 a.setAlbumID(albumId);
-                a.setName(name);
+                a.setAlbumName(name);
                 a.setReleaseDate(releaseDate);
                 a.setRecordLabel(recordLabel);
                 a.setProducer(producer);
@@ -169,7 +171,7 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
 
         try {
             stmt = conn.prepareStatement(SQL_BAND_DETAILS);
-            stmt.setString(1, ""+bID);
+            stmt.setString(1, "" + bID);
             rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -212,14 +214,10 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
         }
         return bands;
     }
-    
+
     /**
-     * DLD
-     * 1. lookup genre ID
-     * 2. get the Genre name corresponding to the ID
-     * 3. form Genre object
-     * 4. add the object to the ArrayList
-     * 5. return the ArrayList to the caller function/method
+     * DLD 1. lookup genre ID 2. get the Genre name corresponding to the ID 3. form Genre object 4. add the object to
+     * the ArrayList 5. return the ArrayList to the caller function/method
      */
     public ArrayList<Genre> getGenreName(int gID) {
         getConnection();
@@ -229,7 +227,7 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
 
         try {
             stmt = conn.prepareStatement(SQL_GENRE_NAME);
-            stmt.setString(1, ""+gID);
+            stmt.setString(1, "" + gID);
             rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -240,10 +238,10 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
                 Integer key = rs.getInt(i++);
                 Integer genreID = rs.getInt(i++);
                 String name = rs.getString(i++);
-                
+
                 g.setGenreID(genreID);
                 g.setGenreName(name);
-               
+
                 Genres.add(g);
 
             }
@@ -252,7 +250,7 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
         }
         return Genres;
     }
-    
+
     // lookup albums that the band has worked with, published, etc.
     public ArrayList<Album> getBandAlbumContribution(int bID) {
         getConnection();
@@ -264,19 +262,19 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
 
         try {
             stmt = conn.prepareStatement(SQL_BAND_ALBUM_CONTRIBUTION);
-            stmt.setString(1, ""+bID);
+            stmt.setString(1, "" + bID);
             rs = stmt.executeQuery();
 
-            while (rs.next()) {           
+            while (rs.next()) {
                 int i = 1;
                 Integer key = rs.getInt(i++);
                 Integer albumID = rs.getInt(i++);
                 Integer bandID = rs.getInt(i++);
-                
+
                 stmt2 = conn.prepareStatement(SQL_ALBUM_INFORMATION);
-                stmt2.setString(1, ""+albumID);
+                stmt2.setString(1, "" + albumID);
                 rs2 = stmt2.executeQuery();
-                while(rs2.next()) {
+                while (rs2.next()) {
                     int m = 1;
                     Integer key2 = rs2.getInt(m++);
                     Integer albumID2 = rs2.getInt(m++);
@@ -284,19 +282,19 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
                     Integer releaseDate = rs2.getInt(m++);
                     String recordLabel = rs2.getString(m++);
                     String producer = rs2.getString(m++);
-                                        
+
                     // Need to convert year to date
                     Calendar c = new GregorianCalendar();
                     c.set(releaseDate, 0, 1);
                     Date dateReleased = new Date(c.getTimeInMillis());
-                       
+
                     Album a = new Album();
                     a.setAlbumID(albumID2);
                     a.setAlbumName(albumName);
                     a.setProducer(producer);
                     a.setRecordLabel(recordLabel);
                     a.setReleaseDate(dateReleased);
-                    
+
                     Albums.add(a);
                 }
             }
@@ -305,7 +303,7 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
         }
         return Albums;
     }
-    
+
     // Lookup all the albums that we know about for this Band and retrieve all the songs we know about
     public ArrayList<Song> getAlbumSongs(ArrayList<Album> albums) {
         getConnection();
@@ -313,12 +311,12 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
         ResultSet rs = null;
         ArrayList<Song> Songs = new ArrayList<Song>();
 
-        for(Album a : albums){
+        for (Album a : albums) {
             try {
                 stmt = conn.prepareStatement(SQL_ALBUM_SONGS);
-                stmt.setString(1, ""+a.getAlbumID());
+                stmt.setString(1, "" + a.getAlbumID());
                 rs = stmt.executeQuery();
-    
+
                 while (rs.next()) {
                     int i = 1;
                     Integer key = rs.getInt(i++);
@@ -327,7 +325,7 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
                     String songName = rs.getString(i++);
                     String author = rs.getString(i++);
                     String bandName = rs.getString(i++);
-                                        
+
                     Song s = new Song();
                     s.setSongID(songID);
                     s.setSongAuthor(author);
@@ -335,16 +333,15 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
                     s.setSongName(songName);
                     s.setAlbumID(albumID);
                     s.setAlbumName(a.getAlbumName());
-                    
+
                     Songs.add(s);
                 }
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-        }
+            } catch (SQLException sqle) {
+                sqle.printStackTrace();
+            }
         }
         return Songs;
     }
-
 
     /**
      * {@inheritDoc} DLD PseudoCode: { 1. get connection object 2. create statement object 3. populate SQL string to
@@ -375,7 +372,7 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
                         loginResult.setSuccess(true);
                         User user = new User();
                         user.setUserName(userName);
-                        user.setPassword(databasePassword);
+                        user.setPass(databasePassword);
                         loginResult.setUser(user);
                     } else {
                         loginResult.setSuccess(false);

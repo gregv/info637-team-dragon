@@ -2,6 +2,10 @@ package edu.drexel.info637.imudb.db;
 
 import java.util.ArrayList;
 
+import edu.drexel.info637.imudb.domain.Album;
+import edu.drexel.info637.imudb.domain.Band;
+import edu.drexel.info637.imudb.domain.Genre;
+import edu.drexel.info637.imudb.domain.Song;
 import edu.drexel.info637.imudb.search.SearchResults;
 import edu.drexel.info637.imudb.user.LoginResult;
 
@@ -28,10 +32,10 @@ public interface IIMuDbDatabase {
     public SearchResults performBasicSearch(String keyword);
 
     public ArrayList<Band> searchBandID(int sBID);
-    
+
     public ArrayList<Genre> getGenreName(int gID);
-    
+
     public ArrayList<Album> getBandAlbumContribution(int bID);
-    
+
     public ArrayList<Song> getAlbumSongs(ArrayList<Album> aList);
 }

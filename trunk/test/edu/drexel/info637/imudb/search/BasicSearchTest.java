@@ -6,6 +6,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.drexel.info637.imudb.search.BasicSearch;
+import edu.drexel.info637.imudb.search.SearchResults;
+
 /**
  * @author Greg Vannoni
  * @class INFO 637 Purpose: Ensure Basic Search functionality works
@@ -53,7 +56,7 @@ public class BasicSearchTest {
 
         sr = basicSearchByAlbum.getResults();
         assertTrue("Result size", sr.size() == 1);
-        assertTrue("Data integrity", sr.getAlbums().get(0).getName().equals("Ten"));
+        assertTrue("Data integrity", sr.getAlbums().get(0).getAlbumName().equals("Ten"));
         assertTrue("Data integrity", sr.getAlbums().get(0).getAlbumID() == 101);
 
         sr = basicSearchForNothing.getResults();
