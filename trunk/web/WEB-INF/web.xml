@@ -36,6 +36,11 @@
 		<servlet-name>LoginPageServlet</servlet-name>
 		<servlet-class>edu.drexel.info637.imudb.servlet.LoginPageServlet</servlet-class>
 	</servlet>	
+
+	<servlet>
+    		<servlet-name>BandArtistServlet</servlet-name>
+    		<servlet-class>edu.drexel.info637.imudb.servlet.BandArtistServlet</servlet-class>
+	</servlet>
 	
 
     <servlet-mapping>
@@ -47,5 +52,11 @@
 			<servlet-name>LoginPageServlet</servlet-name>
 			<url-pattern>/LoginPageServlet</url-pattern>
 		</servlet-mapping>
+
+    <servlet-mapping>
+    	<servlet-name>BandArtistServlet</servlet-name>
+    	<url-pattern>/servlet/BandArtistServlet</url-pattern>
+    </servlet-mapping>
+
 
 </web-app>
