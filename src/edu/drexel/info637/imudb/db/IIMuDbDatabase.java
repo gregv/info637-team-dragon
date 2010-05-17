@@ -26,4 +26,12 @@ public interface IIMuDbDatabase {
     public int requestSQLUpdate(String SQLUpdateQuery);
 
     public SearchResults performBasicSearch(String keyword);
+
+    public ArrayList<Band> searchBandID(int sBID);
+    
+    public ArrayList<Genre> getGenreName(int gID);
+    
+    public ArrayList<Album> getBandAlbumContribution(int bID);
+    
+    public ArrayList<Song> getAlbumSongs(ArrayList<Album> aList);
 }
