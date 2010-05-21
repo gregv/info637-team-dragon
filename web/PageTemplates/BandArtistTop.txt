@@ -2,9 +2,39 @@
 <html><head><title>iMuDb - The Internet Music Database</title>
 <meta name="GENERATOR" content="MSHTML 8.00.6001.18904">
 <meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type">
+<script language="JavaScript" type="text/javascript"> 
+<!--
+ 
+function displayRow(rowname){
+	var row = document.getElementById(rowname);
+	//if (row.style.display == '')  row.style.display = 'none';
+	row.style.display = '';
+}
+ 
+function hideRows(){
+	var row1 = document.getElementById("row1");
+	var row2 = document.getElementById("row2");
+	var row3 = document.getElementById("row3");
+	row1.style.display = 'none';
+	row2.style.display = 'none';
+	row3.style.display = 'none';
+}
 
+function showUserComments(){
+	displayRow("row3");
+}
+
+function showComment(){
+	displayRow("row1");
+	displayRow("row2");
+}
+
+function reset(){
+	hideRows();
+}
+</script>
 </head>
-<body bgcolor="#ffffff">
+<body bgcolor="#ffffff" onLoad="reset();">
 <p>&nbsp;</p>
 <p>
 <table border="0" cellspacing="0" cellpadding="3" width="100%" bgcolor="#515151" 
