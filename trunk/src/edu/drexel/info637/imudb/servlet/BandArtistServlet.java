@@ -115,6 +115,17 @@ public class BandArtistServlet extends HttpServlet {
                 out.println("<td width=\"75%\"><strong></strong></td></tr><tr>");
                 out.println("<td width=\"25%\" valign=\"top\"><strong>External Links</strong></td>");
                 out.println("<td width=\"75%\"><a href='"+b.getExternalWebsite()+"'>"+b.getExternalWebsite()+"</a></td></tr>");
+                out.println("<tr><td colspan=\"2\" bgcolor=\"LIGHTGREY\" align=\"center\"><hr><a href=\"#TOC\" onClick=\"showUserComments();\">View Comments</a>       |     " +
+                        "  <a href=\"#TOC\" onClick=\"showComment();\">Add your comment</a></br></td></tr>");
+                out.println("<tr><td colspan=\"2\" bgcolor=\"LIGHTGREY\" align=\"left\" id=\"row1\"><hr><i>Your Comment:</i></br>" +
+                        "<textarea name=\"txtarea\" cols=\"100%\" rows=\"3\" disabled/>This functionality is not available just yet...</textarea></td></tr>" +
+                        "<tr><td colspan=\"2\" bgcolor=\"LIGHTGREY\" align=\"right\" id=\"row2\"><input type=\"button\" value=\"Comment\" disabled/></td></tr>");
+                out.println("<tr><td colspan=\"2\" bgcolor=\"LIGHTGREY\" align=\"left\" id=\"row3\">");
+                ArrayList<Comment> comments = DBObject.getInstance().getUserComments(iBandID);
+                for(Comment cmm : comments){
+                    out.println("<hr><i>"+cmm.getSComment()+"</i></br>"+cmm.getDAdded().toString()+"</br>");
+                }
+                out.println("</td></tr>");
                 out.println("</tbody></table></ TD><td bordercolor=\"#515151\" width=\"20%\">We will have some more ads here</td></tr>");
             }            
         }

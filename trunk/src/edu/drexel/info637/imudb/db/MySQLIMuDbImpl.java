@@ -18,6 +18,7 @@ import edu.drexel.info637.imudb.domain.Band;
 import edu.drexel.info637.imudb.domain.Genre;
 import edu.drexel.info637.imudb.domain.Song;
 import edu.drexel.info637.imudb.domain.User;
+import edu.drexel.info637.imudb.domain.Comment;
 import edu.drexel.info637.imudb.search.SearchResults;
 import edu.drexel.info637.imudb.user.LoginResult;
 
@@ -43,7 +44,8 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
     private static final String SQL_BAND_ALBUM_CONTRIBUTION       = "SELECT * FROM bandalbumcontribution WHERE Band_ID = ?";
     private static final String SQL_ALBUM_INFORMATION             = "SELECT * FROM album WHERE Album_ID = ?";
     private static final String SQL_ALBUM_SONGS                   = "SELECT * FROM song WHERE Album_ID = ?";
-
+    private static final String SQL_USER_COMMENTS                 = "SELECT * FROM comments WHERE Band_ID = ?";
+    
     Connection                  conn                              = null;
 
     /**
@@ -342,6 +344,47 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
         }
         return Songs;
     }
+    
+    // Retrieve all user comments for the specified BandID
+    public ArrayList<Comment> getUserComments(int bID) {
+        getConnection();
+        PreparedStatement stmt = null;
+        PreparedStatement stmt2 = null;
+        ResultSet rs = null;
+        ResultSet rs2 = null;
+        ArrayList<Comment> comments = new ArrayList<Comment>();
+
+        try {
+            stmt = conn.prepareStatement(SQL_USER_COMMENTS);
+            stmt.setString(1, ""+bID);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int i = 1;
+                Comment com = new Comment();
+                Integer key = rs.getInt(i++);
+                Integer bandID = rs.getInt(i++);
+                Integer userID = rs.getInt(i++);
+                String Comment = rs.getString(i++);
+                int dAdded = rs.getInt(i++);
+                
+                Calendar c = new GregorianCalendar();
+                c.set(dAdded, 0, 1);
+                Date dateAdded = new Date(c.getTimeInMillis());
+                
+                com.setBandID(bandID);
+                com.setUserID(userID);
+                com.setSComment(Comment);
+                com.setDAdded(dateAdded);
+                    
+                comments.add(com);               
+            }
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+        return comments;
+    }
+
 
     /**
      * {@inheritDoc} DLD PseudoCode: { 1. get connection object 2. create statement object 3. populate SQL string to
