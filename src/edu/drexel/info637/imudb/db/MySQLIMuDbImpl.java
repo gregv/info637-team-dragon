@@ -15,10 +15,10 @@ import java.util.List;
 
 import edu.drexel.info637.imudb.domain.Album;
 import edu.drexel.info637.imudb.domain.Band;
+import edu.drexel.info637.imudb.domain.Comment;
 import edu.drexel.info637.imudb.domain.Genre;
 import edu.drexel.info637.imudb.domain.Song;
 import edu.drexel.info637.imudb.domain.User;
-import edu.drexel.info637.imudb.domain.Comment;
 import edu.drexel.info637.imudb.search.SearchResults;
 import edu.drexel.info637.imudb.user.LoginResult;
 
@@ -37,7 +37,7 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
     private static final String SQL_BASIC_SEARCH_TABLES_BAND      = "SELECT * FROM band WHERE name like ?";
     private static final String SQL_BASIC_SEARCH_TABLES_CONCERT   = "SELECT * FROM concert WHERE venue = ?";
     private static final String SQL_BASIC_SEARCH_TABLES_MUSICIAN  = "SELECT * FROM musician WHERE name like ?";
-    private static final String SQL_BASIC_SEARCH_TABLES_SONG      = "SELECT * FROM song WHERE name = ?";
+    private static final String SQL_BASIC_SEARCH_TABLES_SONG      = "SELECT * FROM song WHERE name like ?";
     private static final String SQL_BASIC_SEARCH_TABLES_TRACK     = "SELECT t.* FROM track t,song s WHERE s.name = ? AND t.song_id = s.song_id";
     private static final String SQL_BAND_DETAILS                  = "SELECT * FROM band WHERE Band_ID = ?";
     private static final String SQL_GENRE_NAME                    = "SELECT * FROM genre WHERE Genre_ID = ?";
@@ -45,7 +45,7 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
     private static final String SQL_ALBUM_INFORMATION             = "SELECT * FROM album WHERE Album_ID = ?";
     private static final String SQL_ALBUM_SONGS                   = "SELECT * FROM song WHERE Album_ID = ?";
     private static final String SQL_USER_COMMENTS                 = "SELECT * FROM comments WHERE Band_ID = ?";
-    
+
     Connection                  conn                              = null;
 
     /**
@@ -61,9 +61,91 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
      */
     public SearchResults performBasicSearch(String keyword) {
         SearchResults searchResults = new SearchResults();
+
         searchResults.setAlbumList(searchAlbums(keyword));
         searchResults.setBand(searchBands(keyword));
+        searchResults.setSongList(searchSongs(keyword));
         return searchResults;
+    }
+
+    /*
+     * Searches song information in the database
+     */
+    public List<Song> searchSongs(String keyword) {
+        getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<Song> songs = new ArrayList<Song>();
+
+        try {
+            stmt = conn.prepareStatement(SQL_BASIC_SEARCH_TABLES_SONG);
+            stmt.setString(1, keyword + "%");
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+
+                Song s = new Song();
+
+                int i = 1;
+
+                Integer key = rs.getInt(i++);
+                Integer songId = rs.getInt(i++);
+                Integer albumId = rs.getInt(i++);
+                String name = rs.getString(i++);
+                String author = rs.getString(i++);
+                String band = rs.getString(i++);
+
+                s.setAlbumID(key);
+                s.setAlbumName(getAlbumById(albumId).getAlbumName());
+                s.setBand(band);
+                s.setSongAuthor(author);
+                s.setSongID(songId);
+                s.setSongName(name);
+
+                songs.add(s);
+
+            }
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+        return songs;
+    }
+
+    /*
+     * Gets information about an album by album id
+     */
+    public Album getAlbumById(Integer id) {
+        getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Album a = new Album();
+
+        try {
+            stmt = conn.prepareStatement(SQL_ALBUM_INFORMATION);
+            stmt.setInt(1, id);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+
+                int i = 1;
+                Integer key = rs.getInt(i++);
+                Integer albumId = rs.getInt(i++);
+                String name = rs.getString(i++);
+                Date releaseDate = rs.getDate(i++);
+                String recordLabel = rs.getString(i++);
+                String producer = rs.getString(i++);
+
+                a.setAlbumID(albumId);
+                a.setAlbumName(name);
+                a.setReleaseDate(releaseDate);
+                a.setRecordLabel(recordLabel);
+                a.setProducer(producer);
+
+            }
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+        return a;
     }
 
     /*
@@ -344,7 +426,7 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
         }
         return Songs;
     }
-    
+
     // Retrieve all user comments for the specified BandID
     public ArrayList<Comment> getUserComments(int bID) {
         getConnection();
@@ -356,7 +438,7 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
 
         try {
             stmt = conn.prepareStatement(SQL_USER_COMMENTS);
-            stmt.setString(1, ""+bID);
+            stmt.setString(1, "" + bID);
             rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -367,24 +449,23 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
                 Integer userID = rs.getInt(i++);
                 String Comment = rs.getString(i++);
                 int dAdded = rs.getInt(i++);
-                
+
                 Calendar c = new GregorianCalendar();
                 c.set(dAdded, 0, 1);
                 Date dateAdded = new Date(c.getTimeInMillis());
-                
+
                 com.setBandID(bandID);
                 com.setUserID(userID);
                 com.setSComment(Comment);
                 com.setDAdded(dateAdded);
-                    
-                comments.add(com);               
+
+                comments.add(com);
             }
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
         return comments;
     }
-
 
     /**
      * {@inheritDoc} DLD PseudoCode: { 1. get connection object 2. create statement object 3. populate SQL string to

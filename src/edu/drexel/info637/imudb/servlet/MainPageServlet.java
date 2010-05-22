@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import edu.drexel.info637.imudb.domain.Album;
 import edu.drexel.info637.imudb.domain.Band;
+import edu.drexel.info637.imudb.domain.Song;
 import edu.drexel.info637.imudb.search.BasicSearch;
 import edu.drexel.info637.imudb.search.SearchResults;
 import edu.drexel.info637.imudb.user.AccessType;
@@ -73,6 +74,7 @@ public class MainPageServlet extends HttpServlet {
         SearchResults searchResults = basicSearch.getResults();
         List<Album> albums = searchResults.getAlbums();
         List<Band> bands = searchResults.getBands();
+        List<Song> songs = searchResults.getSongs();
 
         if (searchResults.size() == 0) {
             out.println("<h1>There are no results to display for your query</h1>");
@@ -85,6 +87,16 @@ public class MainPageServlet extends HttpServlet {
 
             for (Album a : albums) {
                 out.printf("<tr> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> </tr>", a.getAlbumID(), a.getAlbumName(), a.getProducer(), a.getRecordLabel());
+            }
+            out.println("</table>");
+        }
+        if (songs.size() > 0) {
+            out.println("<h1>Song Search Results</h1>");
+            out.println("<table align='center' width='80%'>");
+            out.printf("<tr bgcolor='#C0C0C0'> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> </tr>", "Title", "Author", "Band", "Album");
+
+            for (Song s : songs) {
+                out.printf("<tr> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> </tr>", s.getSongName(), s.getSongAuthor(), s.getBand(), s.getAlbumName());
             }
             out.println("</table>");
         }
