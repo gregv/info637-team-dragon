@@ -103,16 +103,18 @@ public class MainPageServlet extends HttpServlet {
         if (bands.size() > 0) {
             out.println("<h1>Band Search Results</h1>");
             out.println("<table align='center' width='95%'>");
-            out.printf("<tr bgcolor='#C0C0C0'> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td></tr>", "ID", "Name", "Place Of Formation", "Year of Formation", "Link",
-                    "Description", "Influences");
+            out.printf("<tr bgcolor='#C0C0C0'> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td></tr>", "Name", "Place Of Formation", "Year of Formation", "Link", "Description",
+                    "Influences");
 
             for (Band b : bands) {
                 Calendar c = new GregorianCalendar();
                 c.setTimeInMillis(b.getYearFormed().getTime());
 
                 int yearFormed = c.get(GregorianCalendar.YEAR);
-                out.printf("<tr> <td>%s</td> <td><a href='../BandArtist.htm'><b>%s</b></a></td> <td>%s</td> <td>%s</td> <td>%s</td> <td><font size='2'>%s</font></td> <td><font size='2'>%s</font></td> </tr>", b
-                        .getBandID(), b.getName(), b.getPlaceFormed(), yearFormed, b.getExternalWebsite(), b.getDescription(), b.getInfluences());
+                out
+                        .printf(
+                                "<tr> <td><a href='../servlet/BandArtistServlet?BandID=%d'><b>%s</b></a></td> <td>%s</td> <td>%s</td> <td>%s</td> <td><font size='2'>%s</font></td> <td><font size='2'>%s</font></td> </tr>",
+                                b.getBandID(), b.getName(), b.getPlaceFormed(), yearFormed, b.getExternalWebsite(), b.getDescription(), b.getInfluences());
             }
             out.println("</table>");
         }
