@@ -42,6 +42,7 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
     private static final String SQL_BAND_DETAILS                  = "SELECT * FROM band WHERE Band_ID = ?";
     private static final String SQL_GENRE_NAME                    = "SELECT * FROM genre WHERE Genre_ID = ?";
     private static final String SQL_BAND_ALBUM_CONTRIBUTION       = "SELECT * FROM bandalbumcontribution WHERE Band_ID = ?";
+    private static final String SQL_ALBUM_BAND_CONTRIBUTION       = "SELECT * FROM bandalbumcontribution WHERE Album_ID = ?";
     private static final String SQL_ALBUM_INFORMATION             = "SELECT * FROM album WHERE Album_ID = ?";
     private static final String SQL_ALBUM_SONGS                   = "SELECT * FROM song WHERE Album_ID = ?";
     private static final String SQL_USER_COMMENTS                 = "SELECT * FROM comments WHERE Band_ID = ?";
@@ -95,7 +96,7 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
                 String author = rs.getString(i++);
                 String band = rs.getString(i++);
 
-                s.setAlbumID(key);
+                s.setAlbumID(albumId);
                 s.setAlbumName(getAlbumById(albumId).getAlbumName());
                 s.setBand(band);
                 s.setSongAuthor(author);
@@ -244,6 +245,35 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
         return bands;
     }
 
+    public Band getBandFromAlbumId(int albumId) {
+        getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Integer bandId = null;
+        Band b = new Band();
+
+        try {
+            stmt = conn.prepareStatement(SQL_ALBUM_BAND_CONTRIBUTION);
+            stmt.setInt(1, albumId);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                bandId = rs.getInt("Band_ID");
+            } else {
+                bandId = -1;
+            }
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+
+        ArrayList<Band> band = searchBandID(bandId);
+
+        if (bandId != null && band != null && band.size() > 0)
+            b = band.get(0);
+
+        return b;
+    }
+
     // use this method to get a band by its ID
     // this means that we already have selected the band (out of a list of a few possibles) and
     // we want to take the specific one, identified by its BandID number
@@ -255,7 +285,7 @@ public class MySQLIMuDbImpl implements IIMuDbDatabase {
 
         try {
             stmt = conn.prepareStatement(SQL_BAND_DETAILS);
-            stmt.setString(1, "" + bID);
+            stmt.setInt(1, bID);
             rs = stmt.executeQuery();
 
             while (rs.next()) {

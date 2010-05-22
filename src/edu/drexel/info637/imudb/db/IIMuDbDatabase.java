@@ -4,12 +4,11 @@ import java.util.ArrayList;
 
 import edu.drexel.info637.imudb.domain.Album;
 import edu.drexel.info637.imudb.domain.Band;
+import edu.drexel.info637.imudb.domain.Comment;
 import edu.drexel.info637.imudb.domain.Genre;
 import edu.drexel.info637.imudb.domain.Song;
-import edu.drexel.info637.imudb.domain.Comment;
 import edu.drexel.info637.imudb.search.SearchResults;
 import edu.drexel.info637.imudb.user.LoginResult;
-
 
 /**
  * This interface is used to define methods that need to be implemented by the database class. This interface allows for
@@ -32,14 +31,16 @@ public interface IIMuDbDatabase {
     public int requestSQLUpdate(String SQLUpdateQuery);
 
     public SearchResults performBasicSearch(String keyword);
-    
+
     public ArrayList<Band> searchBandID(int sBID);
-    
+
     public ArrayList<Genre> getGenreName(int gID);
-    
+
     public ArrayList<Album> getBandAlbumContribution(int bID);
-    
+
     public ArrayList<Song> getAlbumSongs(ArrayList<Album> aList);
-    
+
     public ArrayList<Comment> getUserComments(int bID);
+
+    public Band getBandFromAlbumId(int albumId);
 }
