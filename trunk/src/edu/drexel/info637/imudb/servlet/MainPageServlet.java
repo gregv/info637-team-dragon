@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import edu.drexel.info637.imudb.db.DBObject;
 import edu.drexel.info637.imudb.domain.Album;
 import edu.drexel.info637.imudb.domain.Band;
 import edu.drexel.info637.imudb.domain.Song;
@@ -54,8 +55,8 @@ public class MainPageServlet extends HttpServlet {
         out.println("<html>");
 
         out.println("<p>&nbsp;</p>" + "<table border='0' cellspacing='0' cellpadding='3' width='100%' bgcolor='#515151' align=center>" + "<tbody>" + "<tr>" + "<td>"
-                + "<p align='left'><img border='0' hspace='0' src='../images/iMuDbLogo.jpg' width='184' height=90></p>" + "</td>" + "<td>" + "<p align='center'>" + "<form name='searchForm' method='POST'>"
-                + "<font color='#ffffff'>Search &nbsp; " + "<select size='1' name=SearchOption>" + "<option selected value=Basic>Basic</option> "
+                + "<p align='left'><a href='../index.jsp'><img border='0' hspace='0' src='../images/iMuDbLogo.jpg' width='184' height=90></a></p>" + "</td>" + "<td>" + "<p align='center'>"
+                + "<form name='searchForm' method='POST'>" + "<font color='#ffffff'>Search &nbsp; " + "<select size='1' name=SearchOption>" + "<option selected value=Basic>Basic</option> "
                 + "<option value=Advanced>Advanced</option></select>&nbsp;&nbsp; " + "<input size='60' name='SearchText'>&nbsp; " + "<input value='Search' type='submit' name='startSearch'>" + "</font>"
                 + "</form>" + "</p>" + "</td>" + "<td valign='center'>" + "<p align='right'><font color='#ffffff'><font color='#ffffff'></font>"
                 + "<font color=#ffffff></font><font color='#ffffff'></font><font color=#ffffff></font>" + "Register | <a href='../loginpage.jsp'>Login</a> | Help</font></p>"
@@ -96,7 +97,10 @@ public class MainPageServlet extends HttpServlet {
             out.printf("<tr bgcolor='#C0C0C0'> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> </tr>", "Title", "Author", "Band", "Album");
 
             for (Song s : songs) {
-                out.printf("<tr> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> </tr>", s.getSongName(), s.getSongAuthor(), s.getBand(), s.getAlbumName());
+                Band b = DBObject.getInstance().getBandFromAlbumId(s.getAlbumID());
+
+                out.printf("<tr> <td>%s</td> <td>%s</td> <td><a href='../servlet/BandArtistServlet?BandID=%d'>%s</a></td> <td>%s</td> </tr>", s.getSongName(), s.getSongAuthor(), b.getBandID(), s.getBand(), s
+                        .getAlbumName());
             }
             out.println("</table>");
         }

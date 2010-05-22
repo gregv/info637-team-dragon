@@ -18,6 +18,7 @@ public class BasicSearchTest {
 
     private BasicSearch basicSearchByBand;
     private BasicSearch basicSearchByAlbum;
+    private BasicSearch basicSearchBySong;
     private BasicSearch basicSearchForNothing;
 
     /**
@@ -31,9 +32,13 @@ public class BasicSearchTest {
 
         basicSearchByAlbum = new BasicSearch();
         basicSearchByAlbum.setKeyword("Ten");
-
+        
+        basicSearchBySong = new BasicSearch();
+        basicSearchBySong.setKeyword("Once");
+        
+        
         basicSearchForNothing = new BasicSearch();
-        basicSearchForNothing.setKeyword("");
+        basicSearchForNothing.setKeyword("nothing");
     }
 
     /**
@@ -58,8 +63,13 @@ public class BasicSearchTest {
         assertTrue("Result size", sr.size() == 1);
         assertTrue("Data integrity", sr.getAlbums().get(0).getAlbumName().equals("Ten"));
         assertTrue("Data integrity", sr.getAlbums().get(0).getAlbumID() == 101);
+        
+        sr = basicSearchBySong.getResults();
+        assertTrue("Result size", sr.size() == 1);
+        assertTrue("Data integrity", sr.getSongs().get(0).getSongName().equals("Once") );
+        assertTrue("Data integrity", sr.getSongs().get(0).getSongID() == 10001);
 
         sr = basicSearchForNothing.getResults();
-        assertTrue("Result size", sr.size() == 2);
+        assertTrue("Result size", sr.size() == 0);
     }
 }
