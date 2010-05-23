@@ -10,11 +10,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import edu.drexel.info637.imudb.db.DBObject;
 import edu.drexel.info637.imudb.domain.Album;
 import edu.drexel.info637.imudb.domain.Band;
 import edu.drexel.info637.imudb.domain.Song;
+import edu.drexel.info637.imudb.domain.User;
 import edu.drexel.info637.imudb.search.BasicSearch;
 import edu.drexel.info637.imudb.search.SearchResults;
 import edu.drexel.info637.imudb.user.AccessType;
@@ -54,12 +56,21 @@ public class MainPageServlet extends HttpServlet {
 
         out.println("<html>");
 
+        String loginHTML;
+        HttpSession session = request.getSession();
+        User currentUser = (User)session.getAttribute("user");
+        if (currentUser == null) {
+            loginHTML = "<a href=\"loginpage.jsp\">Login</a>";
+        } else {
+            loginHTML = currentUser.getUserName() + " logged in";
+        }
+
         out.println("<p>&nbsp;</p>" + "<table border='0' cellspacing='0' cellpadding='3' width='100%' bgcolor='#515151' align=center>" + "<tbody>" + "<tr>" + "<td>"
-                + "<p align='left'><a href='../index.jsp'><img border='0' hspace='0' src='../images/iMuDbLogo.jpg' width='184' height=90></a></p>" + "</td>" + "<td>" + "<p align='center'>"
+                + "<p align='left'><a href=\"index.jsp\"><img border='0' hspace='0' src=\"images/iMuDbLogo.jpg\" width='184' height=90></a></p>" + "</td>" + "<td>" + "<p align='center'>"
                 + "<form name='searchForm' method='POST'>" + "<font color='#ffffff'>Search &nbsp; " + "<select size='1' name=SearchOption>" + "<option selected value=Basic>Basic</option> "
                 + "<option value=Advanced>Advanced</option></select>&nbsp;&nbsp; " + "<input size='60' name='SearchText'>&nbsp; " + "<input value='Search' type='submit' name='startSearch'>" + "</font>"
                 + "</form>" + "</p>" + "</td>" + "<td valign='center'>" + "<p align='right'><font color='#ffffff'><font color='#ffffff'></font>"
-                + "<font color=#ffffff></font><font color='#ffffff'></font><font color=#ffffff></font>" + "Register | <a href='../loginpage.jsp'>Login</a> | Help</font></p>"
+                + "<font color=#ffffff></font><font color='#ffffff'></font><font color=#ffffff></font>" + "Register | " + loginHTML + " | Help</font></p>"
                 + "<p align='right'><font color='#ffffff'></font>&nbsp;</p></td></tr></tbody></table>" + "</P>" + "<p>");
 
         out.println("You searched for: \"" + searchKeyword + "\"");
@@ -99,7 +110,7 @@ public class MainPageServlet extends HttpServlet {
             for (Song s : songs) {
                 Band b = DBObject.getInstance().getBandFromAlbumId(s.getAlbumID());
 
-                out.printf("<tr> <td>%s</td> <td>%s</td> <td><a href='../servlet/BandArtistServlet?BandID=%d'>%s</a></td> <td>%s</td> </tr>", s.getSongName(), s.getSongAuthor(), b.getBandID(), s.getBand(), s
+                out.printf("<tr> <td>%s</td> <td>%s</td> <td><a href=\"BandArtistServlet?BandID=%d\">%s</a></td> <td>%s</td> </tr>", s.getSongName(), s.getSongAuthor(), b.getBandID(), s.getBand(), s
                         .getAlbumName());
             }
             out.println("</table>");
@@ -115,10 +126,8 @@ public class MainPageServlet extends HttpServlet {
                 c.setTimeInMillis(b.getYearFormed().getTime());
 
                 int yearFormed = c.get(GregorianCalendar.YEAR);
-                out
-                        .printf(
-                                "<tr> <td><a href='../servlet/BandArtistServlet?BandID=%d'><b>%s</b></a></td> <td>%s</td> <td>%s</td> <td>%s</td> <td><font size='2'>%s</font></td> <td><font size='2'>%s</font></td> </tr>",
-                                b.getBandID(), b.getName(), b.getPlaceFormed(), yearFormed, b.getExternalWebsite(), b.getDescription(), b.getInfluences());
+                out.printf("<tr> <td><a href=\"BandArtistServlet?BandID=%d\"><b>%s</b></a></td> <td>%s</td> <td>%s</td> <td>%s</td> <td><font size='2'>%s</font></td> <td><font size='2'>%s</font></td> </tr>", b
+                        .getBandID(), b.getName(), b.getPlaceFormed(), yearFormed, b.getExternalWebsite(), b.getDescription(), b.getInfluences());
             }
             out.println("</table>");
         }
