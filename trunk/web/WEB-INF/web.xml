@@ -45,7 +45,7 @@
 
     <servlet-mapping>
     	<servlet-name>MainPageServlet</servlet-name>
-    	<url-pattern>/servlet/MainPageServlet</url-pattern>
+    	<url-pattern>/MainPageServlet</url-pattern>
     </servlet-mapping>
 		
 		<servlet-mapping>
@@ -55,7 +55,7 @@
 
     <servlet-mapping>
     	<servlet-name>BandArtistServlet</servlet-name>
-    	<url-pattern>/servlet/BandArtistServlet</url-pattern>
+    	<url-pattern>/BandArtistServlet</url-pattern>
     </servlet-mapping>
 
 
