@@ -22,7 +22,7 @@ import edu.drexel.info637.imudb.user.LoginResult;
 public class LoginPageServlet extends HttpServlet {
 
     private static String FAILED_LOGIN_HTML_HEAD = "<html><p>";
-    private static String FAILED_LOGIN_HTML_TAIL = "</p><p><a href=\"loginpage.jsp\">Retry Login</a></p><p><a href=\"index.htm\">Home Page</a></p></html>";
+    private static String FAILED_LOGIN_HTML_TAIL = "</p><p><a href=\"loginpage.jsp\">Retry Login</a></p><p><a href=\"index.jsp\">Home Page</a></p></html>";
 
     PrintWriter           out                    = null;
 
