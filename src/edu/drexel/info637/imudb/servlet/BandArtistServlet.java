@@ -55,6 +55,7 @@ public class BandArtistServlet extends HttpServlet {
         try{
         String sBandID = request.getParameter("BandID");
         int iBandID = Integer.parseInt(sBandID);
+        User loggedInUser = (User)request.getAttribute("user");
         System.out.println("bandID="+iBandID);
 
         PrintWriter out = null;
@@ -88,23 +89,41 @@ public class BandArtistServlet extends HttpServlet {
                 out.println("<td width=\"75%\">"+b.getDescription()+"</td></tr><tr>");
                 out.println("<td width=\"25%\" valign=\"top\"><strong>Genre</strong></td>");
                 ArrayList<Genre> gResults = DBObject.getInstance().getGenreName(b.getGenreID());
-                for(Genre g : gResults){
-                    out.println("<td width=\"75%\"><b><i>"+g.getGenreName()+"</i></b></td></tr><tr>");
+                if(gResults.size()<1){
+                    out.println("<td width=\"75%\"><b><i>N/A</i></b></td></tr><tr>");
+                }
+                else{
+                    for(Genre g : gResults){
+                        out.println("<td width=\"75%\"><b><i>"+g.getGenreName()+"</i></b></td></tr><tr>");
+                    }
                 }
                 //out.println("<td width=\"75%\">"+b.getGenreID()+"</td></tr><tr>");
                 out.println("<td width=\"25%\" valign=\"top\"><strong>Discography</strong></td><td width=\"75%\">");
                 ArrayList<Album> aResults = DBObject.getInstance().getBandAlbumContribution(b.getBandID());
-                for(Album a : aResults){
-                    out.println("<b><i>"+a.getAlbumName()+"</i></b>" +
-                            " - Released on "+a.getReleaseDate().toString()+" by "+a.getRecordLabel()+"" +
-                            ", produced by "+a.getProducer()+"</br>");
+                if(aResults.size()<1){
+                    out.println("<b><i>N/A</i></b>" +
+                            " - Released on N/A by N/A" +
+                            ", produced by N/A</br>");
+                }
+                else{
+                    for(Album a : aResults){
+                        out.println("<b><i>"+a.getAlbumName()+"</i></b>" +
+                                " - Released on "+a.getReleaseDate().toString()+" by "+a.getRecordLabel()+"" +
+                                ", produced by "+a.getProducer()+"</br>");
+                    }
                 }
                 //out.println("<td width=\"75%\"><strong></strong></td></tr><tr>");
                 out.println("</td></tr><tr><td width=\"25%\" valign=\"top\"><strong>Songs</strong></td><td width=\"75%\">");
                 ArrayList<Song> songResults = DBObject.getInstance().getAlbumSongs(aResults);
-                for(Song sng : songResults){
-                    out.println("<b><i><u>"+sng.getSongName()+"</u></i></b> - Album: <b><i>"+sng.getAlbumName()+"</i></b> - Author: "+sng.getSongAuthor()+" - " +
-                            " <b><i>"+sng.getBand()+"</i></b></br>");
+                if(songResults.size()<1){
+                    out.println("<b><i><u>N/A</u></i></b> - Album: <b><i>N/A</i></b> - Author: N/A - " +
+                            " <b><i>N/A</i></b></br>");
+                }
+                else{
+                    for(Song sng : songResults){
+                        out.println("<b><i><u>"+sng.getSongName()+"</u></i></b> - Album: <b><i>"+sng.getAlbumName()+"</i></b> - Author: "+sng.getSongAuthor()+" - " +
+                                " <b><i>"+sng.getBand()+"</i></b></br>");
+                    }
                 }
                 //out.println("<td width=\"75%\"><strong></strong></td></tr><tr>");
                 out.println("</td></tr><tr><td width=\"25%\" valign=\"top\"><strong>Charts and Awards</strong></td>");
@@ -117,13 +136,26 @@ public class BandArtistServlet extends HttpServlet {
                 out.println("<td width=\"75%\"><a href='"+b.getExternalWebsite()+"'>"+b.getExternalWebsite()+"</a></td></tr>");
                 out.println("<tr><td colspan=\"2\" bgcolor=\"LIGHTGREY\" align=\"center\"><hr><a href=\"#TOC\" onClick=\"showUserComments();\">View Comments</a>       |     " +
                         "  <a href=\"#TOC\" onClick=\"showComment();\">Add your comment</a></br></td></tr>");
-                out.println("<tr><td colspan=\"2\" bgcolor=\"LIGHTGREY\" align=\"left\" id=\"row1\"><hr><i>Your Comment:</i></br>" +
-                        "<textarea name=\"txtarea\" cols=\"100%\" rows=\"3\" disabled/>This functionality is not available just yet...</textarea></td></tr>" +
-                        "<tr><td colspan=\"2\" bgcolor=\"LIGHTGREY\" align=\"right\" id=\"row2\"><input type=\"button\" value=\"Comment\" disabled/></td></tr>");
+                if(loggedInUser!=null){
+                    out.println("<tr><td colspan=\"2\" bgcolor=\"LIGHTGREY\" align=\"left\" id=\"row1\"><hr><i>Your Comment:</i></br>" +
+                            "<textarea name=\"txtarea\" cols=\"100%\" rows=\"3\" disabled/>This functionality is not available just yet...</textarea></td></tr>" +
+                            "<tr><td colspan=\"2\" bgcolor=\"LIGHTGREY\" align=\"right\" id=\"row2\"><input type=\"button\" value=\"Comment\" disabled/></td></tr>");
+                }
+                else{
+                    out.println("<tr><td colspan=\"2\" bgcolor=\"LIGHTGREY\" align=\"left\" id=\"row1\"><hr><i>Your Comment:</i></br>" +
+                            "<textarea name=\"txtarea\" cols=\"100%\" rows=\"3\" disabled/>You need to be logged in in order to enter your comments...</textarea></td></tr>" +
+                            "<tr><td colspan=\"2\" bgcolor=\"LIGHTGREY\" align=\"right\" id=\"row2\"><input type=\"button\" value=\"Comment\" disabled/></td></tr>");
+                }
+                
                 out.println("<tr><td colspan=\"2\" bgcolor=\"LIGHTGREY\" align=\"left\" id=\"row3\">");
                 ArrayList<Comment> comments = DBObject.getInstance().getUserComments(iBandID);
-                for(Comment cmm : comments){
-                    out.println("<hr><i>"+cmm.getSComment()+"</i></br>"+cmm.getDAdded().toString()+"</br>");
+                if(comments.size()<1){
+                    out.println("<hr><i>There are no comments available</i></br>");
+                }
+                else{
+                    for(Comment cmm : comments){
+                        out.println("<hr><i>"+cmm.getSComment()+"</i></br>"+cmm.getDAdded().toString()+"</br>");
+                    }
                 }
                 out.println("</td></tr>");
                 out.println("</tbody></table></ TD><td bordercolor=\"#515151\" width=\"20%\">We will have some more ads here</td></tr>");
