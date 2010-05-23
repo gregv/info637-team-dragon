@@ -18,7 +18,7 @@ align=center>
       height=90></p></td>
     <td>
       <p align="center">
-      <form name="searchForm" method="POST" action="servlet/MainPageServlet">
+      <form name="searchForm" method="POST" action="MainPageServlet">
       <font color="#ffffff">Search &nbsp; 
 	      <select size="1" name=SearchOption>
 		      <option selected value=Basic>Basic</option> 
