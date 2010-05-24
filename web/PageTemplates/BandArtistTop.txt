@@ -52,12 +52,16 @@ align=center>
     <td valign="center" v>
       <p align="right"><font color="#ffffff"><font color="#ffffff"></font><font 
       color=#ffffff></font><font color="#ffffff"></font><font 
+<<<<<<< .mine
+      color=#ffffff></font>Register | <a href='../loginpage.jsp'>Login</a> | Help</font></p>
+=======
       color=#ffffff></font>Register | 
       
       @Login@ 
       
       
       | Help</font></p>
+>>>>>>> .r144
       <p align="right"><font color="#ffffff"></font>&nbsp;</p></td></tr></tbody></table></ 
 P>
 <p>
